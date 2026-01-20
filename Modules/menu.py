@@ -11,7 +11,7 @@ def menu():
             if 1 < user_input < len(user_input): # If input is in a word size
                 if word == user_input : # check win 
                     print("You win")
-                    break
+                    return
                 else:
                     pv-=1
                     print(pv)
@@ -23,8 +23,12 @@ def menu():
                     pv-=1
                     print(pv)
                 
-            else:
+            else: 
                 print("Error - input length")
+
+            if pv == 0 :
+                print("You Loose")
+                return
 
     except:
         print("Error")
