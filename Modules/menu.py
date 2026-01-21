@@ -1,7 +1,7 @@
 def menu():
     try:
         pv=7 # init pv
-        letter_finds = {}
+        letter_finds = []
         word = random_word_generator() # Select a random word
 
         while true:
@@ -15,14 +15,12 @@ def menu():
                 else:
                     pv-=1
                     print(pv)
-
             elif user_input == 1: # If input is a letter 
                 if verify_letter(user_input, word): # Check if it's in word
-                    letter_finds += find_letter_in_word() # Add letter placement
+                    letter_finds[] += user_input# Add letter placement
                 elif not verify_letter(user_input,word): # if the letter is not in the word
                     pv-=1
                     print(pv)
-                
             else: 
                 print("Error - input length")
 
