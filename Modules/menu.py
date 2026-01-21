@@ -2,6 +2,7 @@ import pygame
 from display_word import display_word
 from random_word_generator import random_word_generator
 from verify_letter import verify_letter
+import time
 
 
 
@@ -23,16 +24,26 @@ buttons = [
 
 def start_game():
     try:
-        pv=7 # init pv
-        word = random_word_generator()
-        print(word)
-        letter_finds = []
+        pv=7
+        word = random_word_generator() # Generate a random word
+        print(word) # log for debug
+        letter_finds = [] 
 
         playing = True
 
         while playing:
-            display_word(letter_finds, word)
-            user_input = "e" # ------------------- A REMPLACER PAR ask_user() -------------
+
+            window.fill(WHITE) # Background color
+
+            # Display the word 
+            display_text = display_word(letter_finds, word)
+            text_surface = font.render(display_text, True, BLACK)
+            text_rect = text_surface.get_rect(center=(window.get_width()//2, window.get_height()//2))
+            window.blit(text_surface, text_rect)
+
+            pygame.display.flip()
+
+            user_input = "z" # ------------------- Replace ask user  -------------
 
             if 1 < len(user_input) < len(word):
                 if word == user_input: 
@@ -40,19 +51,28 @@ def start_game():
                     return
                 else:
                     pv-=1
-
             elif len(user_input) == 1:
                 if verify_letter(user_input, word):
-                    letter_finds += find_letter_in_word()
+                    letter_finds += user_input
                 elif not verify_letter(user_input,word): # if the letter is not in the word
                     pv-=1
-
             else:
                 print("Error - input length")
 
+
             if pv == 0:
-                print("You Loose")
-                return
+                print(pv)
+                window.fill(WHITE) # Background color
+
+                text_surface = font.render("You loose", True, BLACK)
+                text_rect = text_surface.get_rect(center=(window.get_width()//2, window.get_height()//2))
+                window.blit(text_surface, text_rect)
+                pygame.display.flip()
+                time.sleep(5)
+                playing = False
+
+            print(pv)
+            time.sleep(1)
 
     except Exception as e :
         print("Error - start_game -", e)
