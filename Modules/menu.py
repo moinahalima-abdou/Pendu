@@ -1,6 +1,7 @@
 import pygame
 from display_word import display_word
 from random_word_generator import random_word_generator
+from verify_letter import verify_letter
 
 
 
