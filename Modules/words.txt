@@ -13,4 +13,3 @@ window
 keyboard
 language
 picture
-

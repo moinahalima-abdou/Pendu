@@ -3,10 +3,10 @@ import random
 
 def random_word_generator():
     
-    """Function that returns a random word from the file 'mots.txt'."""
+    """Function that returns a random word from the file 'words.txt'."""
 
-    #Open the file 'mots.txt' in read mode
-    with open("mots.txt", "r") as f:  
+    #Open the file 'words.txt' in read mode
+    with open("Modules/words.txt", "r") as f:  
 
         #Read all lines from the file and create a list of words
         word = f.read().splitlines()

@@ -1,5 +1,6 @@
 import pygame
 from display_word import display_word
+from random_word_generator import random_word_generator
 
 
 
@@ -29,17 +30,17 @@ def start_game():
         playing = True
 
         while playing:
-            display_word(letter_finds)
-            user_input = ask_user()
+            display_word(letter_finds, word)
+            user_input = "e" # ------------------- A REMPLACER PAR ask_user() -------------
 
-            if 1 < user_input < len(user_input):
+            if 1 < len(user_input) < len(word):
                 if word == user_input: 
                     print("You win")
                     return
                 else:
                     pv-=1
 
-            elif user_input == 1:
+            elif len(user_input) == 1:
                 if verify_letter(user_input, word):
                     letter_finds += find_letter_in_word()
                 elif not verify_letter(user_input,word): # if the letter is not in the word
