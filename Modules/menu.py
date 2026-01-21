@@ -1,4 +1,7 @@
 import pygame
+from display_word import display_word
+
+
 
 pygame.init()
 window = pygame.display.set_mode((680, 440))
