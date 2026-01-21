@@ -52,37 +52,40 @@ def start_game():
                 print("You Loose")
                 return
 
-    except:
-        print("Error")
+    except Exception as e :
+        print("Error - start_game -", e)
 
 
-running = True
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        elif event.type == pygame.MOUSEBUTTONDOWN: 
+def menu():
+    try:
+        running = True
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                elif event.type == pygame.MOUSEBUTTONDOWN: 
+                    for btn in buttons: 
+                        if btn["rect"].collidepoint(event.pos):
+                            if btn["action"] == "start_game": 
+                                print("Starting the game...") # call your game loop here 
+                                start_game()
+                            elif btn["action"] == "quit_game": 
+                                print("Quitting...") 
+                                running = False
+
+            window.fill((240, 240, 240))
+
+            # Draw button 
             for btn in buttons: 
-                if btn["rect"].collidepoint(event.pos):
-                    if btn["action"] == "start_game": 
-                        print("Starting the game...") # call your game loop here 
-                        start_game()
-                    elif btn["action"] == "quit_game": 
-                        print("Quitting...") 
-                        running = False
+                pygame.draw.rect(window, BLUE, btn["rect"]) 
+                text_surface = font.render(btn["text"], True, WHITE) 
+                # Center text inside the button 
+                text_rect = text_surface.get_rect(center=btn["rect"].center) 
+                window.blit(text_surface, text_rect)
 
-    window.fill((240, 240, 240))
+            pygame.display.flip()
 
-    # Draw button 
-    for btn in buttons: 
-        pygame.draw.rect(window, BLUE, btn["rect"]) 
-        text_surface = font.render(btn["text"], True, WHITE) 
-        # Center text inside the button 
-        text_rect = text_surface.get_rect(center=btn["rect"].center) 
-        window.blit(text_surface, text_rect)
-
-    pygame.display.flip()
-
-pygame.quit()
-
-
+        pygame.quit()
+    except Exception as e :
+        print("Error - menu -", e)
+menu()
