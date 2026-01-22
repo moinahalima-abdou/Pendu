@@ -2,7 +2,8 @@ import pygame
 from display_word import display_word
 from random_word_generator import random_word_generator
 from verify_letter import verify_letter
-from ask_user import ask_user
+
+from draw_stickman import draw_stickman
 import time
 
 pygame.init()
@@ -22,67 +23,100 @@ buttons = [
 
 def start_game(score):
     try:
-        pv=7
+        pv = 7
         word = random_word_generator() # Generate a random word
         print(word) # log for debug
         letter_finds = [] 
+        user_input = ""
         
+        # Key repeat configuration (enable rapid backspace deletion)
+        pygame.key.set_repeat(400, 50)
+
         playing = True
 
         while playing:
+            # 1. DRAWING
+            window.fill(WHITE) # Clear screen
 
-            window.fill(WHITE) # Background color
+            # Draw Stickman (always visible)
+            draw_stickman(window, pv)
 
-            # Display the word 
+            # Display the hidden/revealed word
             display_text = display_word(letter_finds, word)
             text_surface = font.render(display_text, True, BLACK)
-            text_rect = text_surface.get_rect(center=(window.get_width()//2, window.get_height()//2))
+            text_rect = text_surface.get_rect(center=(window.get_width()//2, 380))
             window.blit(text_surface, text_rect)
+
+            # Display User Input (top left)
+            if user_input:
+                input_surface = font.render(user_input, True, BLACK)
+                input_rect = input_surface.get_rect(topleft=(20, 20))
+                window.blit(input_surface, input_rect)
 
             pygame.display.flip()
 
-            user_input = ask_user(word, window, font, display_text)
-            if user_input is None: # if the user quit to prevent crashing
-                return score
-
-            if len(user_input) == len(word):
-                if word == user_input: 
-                    score += 1
-                    print("You win")
-
-                    window.fill(WHITE) # Background color
-
-                    text_surface = font.render("You win", True, BLACK)
-                    text_rect = text_surface.get_rect(center=(window.get_width()//2, window.get_height()//2))
-                    window.blit(text_surface, text_rect)
-                    pygame.display.flip()
-                    time.sleep(3)
-                    playing = False
-
+            # 2. EVENT HANDLING
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.key.set_repeat(0)
                     return score
-                else:
-                    pv-=1
-            elif len(user_input) == 1:
-                if verify_letter(user_input, word):
-                    letter_finds += user_input
-                elif not verify_letter(user_input,word): # if the letter is not in the word
-                    pv-=1
-            else:
-                print("Error - input length")
+                
+                elif event.type == pygame.KEYDOWN:
+                    # Validate Input (Enter)
+                    if event.key == pygame.K_RETURN:
+                        if len(user_input) > 0:
+                            # Verify Word
+                            if len(user_input) == len(word):
+                                if word == user_input: 
+                                    score += 1
+                                    print("You win")
 
+                                    window.fill(WHITE)
+                                    text_surface = font.render("You win", True, BLACK)
+                                    text_rect = text_surface.get_rect(center=(window.get_width()//2, window.get_height()//2))
+                                    window.blit(text_surface, text_rect)
+                                    pygame.display.flip()
+                                    time.sleep(3)
+                                    
+                                    pygame.key.set_repeat(0)
+                                    return score
+                                else:
+                                    pv -= 1
+                            # Verify Letter
+                            elif len(user_input) == 1:
+                                if verify_letter(user_input, word):
+                                    letter_finds.append(user_input) # Note: letter_finds should probably be a list of characters
+                                elif not verify_letter(user_input, word):
+                                    pv -= 1
+                            else:
+                                print("Error - input length")
+                            
+                            # Reset input after validation
+                            user_input = ""
 
+                    # Backspace
+                    elif event.key == pygame.K_BACKSPACE:
+                        user_input = user_input[:-1]
+
+                    # Typing Letters
+                    elif event.unicode.isalpha() and len(user_input) < len(word):
+                        user_input += event.unicode.lower()
+            
+            # 3. CHECK END GAME (LOSS)
             if pv == 0:
                 print(pv)
-                window.fill(WHITE) # Background color
-
+                # Ensure the last stickman part is drawn
+                window.fill(WHITE)
+                draw_stickman(window, pv) # Draw full stickman
+                
                 text_surface = font.render("You loose", True, BLACK)
-                text_rect = text_surface.get_rect(center=(window.get_width()//2, window.get_height()//2))
+                text_rect = text_surface.get_rect(center=(window.get_width()//2, 380))
                 window.blit(text_surface, text_rect)
                 pygame.display.flip()
                 time.sleep(3)
+                
+                pygame.key.set_repeat(0)
                 return score
-
-            print(pv)
 
     except Exception as e :
         print("Error - start_game -", e)

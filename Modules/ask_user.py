@@ -41,7 +41,7 @@ def ask_user(word, window, font, display_text):
                 
                 # Add the typed character to the text if it is a letter and not longer than the word
                 elif len(user_input) < len(word) and event.unicode.isalpha():
-                    user_input += event.unicode
+                    user_input += event.unicode.lower()
 
                 else :
                     print("Word is max size or not a letter")
