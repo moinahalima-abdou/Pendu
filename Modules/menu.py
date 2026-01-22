@@ -85,7 +85,24 @@ def start_game(score):
                             # Verify Letter
                             elif len(user_input) == 1:
                                 if verify_letter(user_input, word):
-                                    letter_finds.append(user_input) # Note: letter_finds should probably be a list of characters
+                                    letter_finds.append(user_input)
+                                    
+                                    # Check if all letters are found
+                                    if all(char in letter_finds for char in word):
+                                        score += 1
+                                        print("You win")
+
+                                        window.fill(WHITE)
+                                        text_surface = font.render("You win", True, BLACK)
+                                        # Using 380 as Y position to match recent user changes
+                                        text_rect = text_surface.get_rect(center=(window.get_width()//2, 380))
+                                        window.blit(text_surface, text_rect)
+                                        pygame.display.flip()
+                                        time.sleep(3)
+                                        
+                                        pygame.key.set_repeat(0)
+                                        return score
+
                                 elif not verify_letter(user_input, word):
                                     pv -= 1
                             else:
