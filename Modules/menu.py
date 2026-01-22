@@ -27,6 +27,7 @@ def start_game(score):
         word = random_word_generator() # Generate a random word
         print(word) # log for debug
         letter_finds = [] 
+        tried_letters = []
         user_input = ""
         
         # Key repeat configuration (enable rapid backspace deletion)
@@ -52,6 +53,13 @@ def start_game(score):
                 input_surface = font.render(user_input, True, BLACK)
                 input_rect = input_surface.get_rect(topleft=(20, 20))
                 window.blit(input_surface, input_rect)
+
+            # Display Tried Letters (top right)
+            if tried_letters:
+                tried_text = " ".join(tried_letters)
+                tried_surface = font.render(tried_text, True, BLACK)
+                tried_rect = tried_surface.get_rect(topright=(window.get_width() - 20, 20))
+                window.blit(tried_surface, tried_rect)
 
             pygame.display.flip()
 
@@ -84,6 +92,9 @@ def start_game(score):
                                     pv -= 1
                             # Verify Letter
                             elif len(user_input) == 1:
+                                if user_input not in tried_letters:
+                                    tried_letters.append(user_input)
+
                                 if verify_letter(user_input, word):
                                     letter_finds.append(user_input)
                                     
@@ -94,7 +105,6 @@ def start_game(score):
 
                                         window.fill(WHITE)
                                         text_surface = font.render("You win", True, BLACK)
-                                        # Using 380 as Y position to match recent user changes
                                         text_rect = text_surface.get_rect(center=(window.get_width()//2, 380))
                                         window.blit(text_surface, text_rect)
                                         pygame.display.flip()
@@ -151,7 +161,7 @@ def menu():
                     for btn in buttons: 
                         if btn["rect"].collidepoint(event.pos):
                             if btn["action"] == "start_game": 
-                                print("Starting the game...") # call your game loop here 
+                                print("Starting the game...")
                                 score = start_game(score)
                             elif btn["action"] == "quit_game": 
                                 print("Quitting...") 
