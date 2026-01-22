@@ -1,0 +1,15 @@
+think
+dog
+sun
+book
+tree
+house
+apple
+water
+chair
+bread
+computer
+window
+keyboard
+language
+picture
