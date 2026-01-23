@@ -40,7 +40,7 @@ def menu():
                             if btn["action"] == "start_game": 
                                 print("Starting the game...")
 
-                                score = start_game(score, window, font,)
+                                score = start_game(score, window, font)
 
                             elif btn["action"] == "quit_game": 
                                 print("Quitting...") 
