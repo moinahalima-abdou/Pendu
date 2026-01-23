@@ -1,9 +1,9 @@
 import pygame
-from display_word import display_word
-from random_word_generator import random_word_generator
-from verify_letter import verify_letter
+from Modules.display_word import display_word
+from Modules.random_word_generator import random_word_generator
+from Modules.verify_letter import verify_letter
+from Modules.draw_stickman import draw_stickman
 
-from draw_stickman import draw_stickman
 import time
 
 pygame.init()
