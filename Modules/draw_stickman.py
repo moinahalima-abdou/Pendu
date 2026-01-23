@@ -1,6 +1,7 @@
 import pygame
 
 def draw_stickman(window, pv):
+    """Display the stickman with pv in parameters"""
     BLACK = (20, 20, 20)
     width = window.get_width()
     height = window.get_height()
