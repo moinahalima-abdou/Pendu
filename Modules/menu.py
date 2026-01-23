@@ -24,7 +24,9 @@ buttons = [
 
 
 def menu():
-"""Show the menu of the game with start and quit"""
+
+    """Show the menu of the game with start and quit"""
+
     try:
         score = 0
         running = True
